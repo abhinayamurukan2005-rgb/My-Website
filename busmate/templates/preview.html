@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block body %}
+<h2>{{ r.bus_name }} · Interior preview</h2>
+<div class="gallery"><button id="prev">‹</button><img id="big" src="{{ images[0] }}" alt="Bus interior"><button id="next">›</button></div>
+<div class="thumbs">{% for im in images %}<img src="{{ im }}" data-i="{{ loop.index0 }}">{% endfor %}</div>
+<p><a class="btn" href="/route/{{ r.id }}/seats">Select seats</a></p>
+<script>
+const imgs = {{ images|tojson }}; let i = 0; const big = document.getElementById('big');
+const go = n => { i = (n + imgs.length) % imgs.length; big.src = imgs[i]; };
+document.getElementById('prev').onclick = () => go(i - 1);
+document.getElementById('next').onclick = () => go(i + 1);
+document.querySelectorAll('.thumbs img').forEach(t => t.onclick = () => go(+t.dataset.i));
+</script>{% endblock %}

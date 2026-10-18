@@ -1,0 +1,27 @@
+{% extends "base.html" %}{% from "_macros.html" import timeselect %}{% block bodyclass %}admin{% endblock %}{% block body %}
+<h2>⚙️ Admin Dashboard</h2>
+<form class="card row" method="post" action="/admin/password"><b>🔒 Change admin password</b><input type="password" name="old" placeholder="Current password" required><input type="password" name="new" placeholder="New password (6+ chars)" required><button>Update</button></form>
+<div class="stats"><div class="stat"><i>🎟️</i><div><small>Bookings</small><b>{{ stats.n }}</b></div></div><div class="stat"><i>💰</i><div><small>Revenue</small><b>₹{{ stats.rev }}</b></div></div><div class="stat"><i>🚌</i><div><small>Buses</small><b>{{ routes|length }}</b></div></div></div>
+<div class="card"><h3>📊 Seats booked per bus</h3>{% set mx = (chart|map(attribute='n')|max) or 1 %}
+{% for c in chart %}<div class="bar"><span>{{ c.label }}</span><div style="width:{{ (c.n / mx * 100)|round }}%">{{ c.n }}</div></div>{% endfor %}</div>
+<h3>➕ Add a bus</h3>
+<form class="card addbus" method="post" action="/admin/add">
+<label>Bus name<input name="bus_name" placeholder="e.g. Chennai Express" required></label><label>Bus type<input name="bus_type" placeholder="e.g. AC Seater 2+2" required></label>
+<label>From<input name="source" required></label><label>To<input name="destination" required></label>
+<label>📅 Travel date (pick from calendar)<input type="date" name="travel_date" id="tdate" required></label><label>🕘 Departure time<select name="dep_time" required><option value="" disabled selected>Choose timing</option>{% for h in range(24) %}{% for m in (0, 30) %}<option value="{{ '%02d:%02d'|format(h, m) }}">{{ h % 12 or 12 }}:{{ '%02d'|format(m) }} {{ 'AM' if h < 12 else 'PM' }}</option>{% endfor %}{% endfor %}</select></label>
+<label>Ticket price (₹)<input type="number" name="price" min="1" required></label><label>&nbsp;<button>Add bus</button></label></form>
+<h3>🔍 Search</h3>
+<form class="card row" method="get"><input name="q" value="{{ q }}" placeholder="🔍 Search by bus name" style="flex:1;min-width:200px"><input type="date" name="date" value="{{ date }}" title="Filter by date"><button>Search</button><a class="btn alt" href="/admin">Clear</a></form>
+<h3>🚌 Buses ({{ routes|length }})</h3>
+<div style="overflow-x:auto"><table><tr><th>Bus</th><th>Route</th><th>Date</th><th>Time</th><th>Price</th><th>Interior photos</th><th></th></tr>
+{% for r in routes %}<tr><td><b>{{ r.bus_name }}</b><br><small>{{ r.bus_type }}</small></td><td>{{ r.source }} → {{ r.destination }}</td><td>{{ r.travel_date|dmy }}</td><td>{{ r.dep_time|t12 }}</td><td>₹{{ r.price }}</td>
+<td>{% for i in imgs.get(r.id, []) %}<span class="thumb"><img src="/static/uploads/{{ i.image_path }}" height="40"><a href="/admin/image/delete/{{ i.id }}">✕</a></span>{% endfor %}
+<form method="post" action="/admin/upload/{{ r.id }}" enctype="multipart/form-data"><input type="file" name="photos" accept="image/*" multiple required><button>Upload</button></form></td>
+<td><a href="/admin/edit/{{ r.id }}">Edit</a> · <a href="/admin/delete/{{ r.id }}" onclick="return confirm('Delete this bus?')">Delete</a></td></tr>
+{% else %}<tr><td colspan="7">No buses match your search.</td></tr>{% endfor %}</table></div>
+<h3>🎟️ Booking details ({{ passengers|length }} seats)</h3>
+<div style="overflow-x:auto"><table><tr><th>Bus</th><th>Route</th><th>Date</th><th>Time</th><th>Seat</th><th>Passenger</th><th>Gender</th><th>📱 Contact</th><th>Payment</th><th></th></tr>
+{% for p in passengers %}<tr><td><b>{{ p.bus_name }}</b></td><td>{{ p.source }} → {{ p.destination }}</td><td>{{ p.travel_date|dmy }}</td><td>{{ p.dep_time|t12 }}</td><td>{{ p.seat_no }}</td><td>{{ p.passenger_name }}</td><td>{{ 'Female' if p.passenger_gender=='F' else 'Male' if p.passenger_gender=='M' else 'Other' }}</td>
+<td>{{ p.booked_by }}</td><td>{{ p.payment_method or '-' }}<br><small>{{ p.payment_ref or '' }}</small></td><td><a href="/admin/cancel/{{ p.booking_id }}" onclick="return confirm('Cancel this whole booking?')">Cancel booking</a></td></tr>
+{% else %}<tr><td colspan="10">No bookings found.</td></tr>{% endfor %}</table></div>
+<script>document.getElementById('tdate').min = new Date().toISOString().split('T')[0];</script>{% endblock %}

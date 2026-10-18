@@ -1,0 +1,2 @@
+{% macro timeselect(name, cur='') %}<select name="{{ name }}" required>{% for h in range(24) %}{% for m in (0, 30) %}{% set v = '%02d:%02d'|format(h, m) %}
+<option value="{{ v }}" {{ 'selected' if v == cur }}>{{ h % 12 or 12 }}:{{ '%02d'|format(m) }} {{ 'AM' if h < 12 else 'PM' }}</option>{% endfor %}{% endfor %}</select>{% endmacro %}

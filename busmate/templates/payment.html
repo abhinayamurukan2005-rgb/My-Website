@@ -1,0 +1,20 @@
+{% extends "base.html" %}{% block body %}
+<h2>💳 Payment</h2>
+<div class="seat-layout"><div class="card" style="flex:1;min-width:260px"><h3>🧾 Booking summary</h3>
+<div class="route">{{ r.source }} → {{ r.destination }}</div><div class="when">🚌 {{ r.bus_name }} · 📅 {{ r.travel_date|dmy }} · 🕘 {{ r.dep_time|ampm }}</div>
+<div class="when">📱 Contact: {{ p["phone"] }}</div><table style="margin:12px 0"><tr><th>Seat</th><th>Passenger</th><th>Gender</th></tr>{% for i in p["items"] %}<tr><td>{{ i.seat }}</td><td>{{ i.name }}</td><td>{{ 'Female' if i.gender=='F' else 'Male' }}</td></tr>{% endfor %}</table>
+<p>Total to pay: <b style="font-size:1.6rem;color:#29B6F6">₹{{ p["total"] }}</b></p></div>
+<div class="card" style="flex:1;min-width:280px"><div class="tabs"><button type="button" class="tab on" data-m="UPI">📱 UPI</button><button type="button" class="tab" data-m="Card">💳 Card</button><button type="button" class="tab" data-m="NetBanking">🏦 Net Banking</button></div>
+<form method="post" id="payForm"><input type="hidden" name="method" id="method" value="UPI">
+<div class="panel" data-m="UPI"><input name="upi" placeholder="yourname@upi" style="width:100%"></div>
+<div class="panel" data-m="Card" hidden><input name="card" placeholder="Card number (16 digits)" maxlength="19" style="width:100%;margin:6px 0"><input name="exp" placeholder="MM/YY" style="width:48%"> <input name="cvv" type="password" placeholder="CVV" maxlength="4" style="width:48%"></div>
+<div class="panel" data-m="NetBanking" hidden><select name="bank" style="width:100%"><option value="">Select your bank</option><option>State Bank of India</option><option>Indian Bank</option><option>HDFC Bank</option><option>ICICI Bank</option><option>Canara Bank</option></select></div>
+<button id="payBtn" style="width:100%;margin-top:14px">🔐 Pay ₹{{ p["total"] }}</button></form>
+<p style="font-size:.8rem;color:#78909C">Demo payment for a college project. No real money is charged and card details are never saved.</p></div></div>
+<script>
+const tabs=document.querySelectorAll('.tab'),panels=document.querySelectorAll('.panel');
+function show(m){document.getElementById('method').value=m;tabs.forEach(t=>t.classList.toggle('on',t.dataset.m==m));
+panels.forEach(p=>{const on=p.dataset.m==m;p.hidden=!on;p.querySelectorAll('input,select').forEach(x=>{x.disabled=!on;x.required=on&&x.name!='exp'})})}
+tabs.forEach(t=>t.onclick=()=>show(t.dataset.m));show('UPI');
+document.getElementById('payForm').onsubmit=()=>{const b=document.getElementById('payBtn');b.textContent='⏳ Processing payment...';setTimeout(()=>b.disabled=true,50)};
+</script>{% endblock %}

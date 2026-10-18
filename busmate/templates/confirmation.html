@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block body %}
+<div class="card" style="text-align:center;max-width:560px;margin:20px auto"><img src="/static/images/mascot.svg" width="150" alt="BusMate" style="animation:bob 2.6s ease-in-out infinite">
+<h2>🎉 Payment successful!</h2><p>Your seats are booked. Have a safe journey!<br><small>Find this ticket any time under My Tickets using your mobile number.</small></p>
+<div class="ticket" style="text-align:left"><div class="tl"><small>BOOKING #{{ b.id }} · REF {{ b.payment_ref }}</small><div class="route">{{ b.source }} → {{ b.destination }}</div>
+<div class="when">🚌 {{ b.bus_name }}<br>📅 {{ b.travel_date|dmy }} · 🕘 {{ b.dep_time|ampm }}</div><p>💺 Seats: <b>{{ b.seats }}</b><br>📱 {{ ('••••••' ~ b.phone[-4:]) if b.phone else '' }}</p></div>
+<div class="tr"><small>PAID</small><b>₹{{ b.total }}</b><small>{{ b.payment_method }}</small></div></div>
+<button onclick="window.print()">🖨️ Print ticket</button> <a class="btn alt" href="/my-tickets">My Tickets</a></div>{% endblock %}

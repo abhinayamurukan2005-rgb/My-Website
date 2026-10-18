@@ -1,0 +1,11 @@
+{% extends "base.html" %}{% block body %}
+<h2>💺 {{ r.bus_name }}: {{ r.source }} → {{ r.destination }}</h2>
+<p><a class="btn alt" href="/route/{{ r.id }}/preview">📷 View Bus Interior</a></p>
+<div class="seat-layout"><div>
+<div class="legend"><span class="seat">Available</span><span class="seat picked">Selected</span><span class="seat bF">Female</span><span class="seat bM">Male</span></div>
+<div class="busshell"><div class="front"><span>🛞 Driver</span><span>Door 🚪</span></div><div id="bus" data-route="{{ r.id }}" data-price="{{ r.price }}"></div></div></div>
+<div class="seat-side"><label><input type="checkbox" id="winOnly"> ✨ Highlight window seats</label>
+<div id="info" class="flash" style="background:#E1F5FE;border-color:#29B6F6">🛡️ Hover or tap a seat to see its neighbour.</div>
+<form method="post" action="/book" class="card" id="bookForm"><h3>🧾 Passenger details</h3><input type="hidden" name="route_id" value="{{ r.id }}"><input type="hidden" name="data" id="data">
+<input name="phone" type="tel" placeholder="📱 Mobile number (10 digits)" pattern="[6-9][0-9]{9}" maxlength="10" title="Enter a 10-digit mobile number" required style="width:100%;margin-bottom:10px"><div id="pax"></div><p>Total: <b style="font-size:1.4rem;color:#29B6F6">₹<span id="total">0</span></b></p><button>Proceed to payment 💳</button></form></div></div>
+<script src="/static/js/seats.js"></script>{% endblock %}

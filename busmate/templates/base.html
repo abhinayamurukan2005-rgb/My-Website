@@ -1,0 +1,7 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BusMate · Book your bus seat</title><link rel="icon" href="/static/images/mascot.svg"><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="/static/css/style.css"></head><body class="{% block bodyclass %}{% endblock %}">
+<nav><a class="logo" href="/"><img src="/static/images/mascot.svg" alt="BusMate logo">Bus<b>Mate</b></a>
+<span><a href="/">🏠 Home</a><a href="/my-tickets">🎟️ My Tickets</a>{% if session.role=='admin' %}<a href="/admin">⚙️ Admin</a><a href="/logout">Logout</a>{% endif %}</span></nav>
+<main>{% for m in get_flashed_messages() %}<div class="flash">{{ m }}</div>{% endfor %}{% block body %}{% endblock %}</main>
+<footer><img src="/static/images/mascot.svg" alt=""><b>BusMate</b> · Safe, simple bus booking · College project · <a href="/admin/login" style="color:#B3E5FC">Admin login</a></footer>
+<div class="tip" onclick="this.remove()" title="Click to close"><img src="/static/images/mascot.svg" alt="">Pick your seat, I'll handle the ride!</div></body></html>

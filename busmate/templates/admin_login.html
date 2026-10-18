@@ -1,0 +1,3 @@
+{% extends "base.html" %}{% block bodyclass %}admin{% endblock %}{% block body %}
+<div class="card narrow" style="text-align:center"><img src="/static/images/mascot.svg" width="150" alt="BusMate"><h2>🔒 Admin Portal</h2><p>Only authorised staff can enter.</p>
+<form method="post"><input type="email" name="email" placeholder="Admin email" required><input type="password" name="password" placeholder="Admin password" required><button>Login as admin</button></form></div>{% endblock %}

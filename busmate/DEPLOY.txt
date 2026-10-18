@@ -1,0 +1,24 @@
+SHARE BUSMATE WITH A LINK (free, PythonAnywhere)
+
+1. Go to pythonanywhere.com > Pricing > create a free "Beginner" account.
+   Your USERNAME becomes your link, so try the username:  busmate
+   Link = https://busmate.pythonanywhere.com   (if taken, try busmate2026 or busmatebooking)
+2. Files tab > Upload a file > upload busmate.zip
+3. Consoles tab > Bash > type:   unzip busmate.zip
+   (Optional: upload your own busmate.db into the busmate folder first to keep your buses.)
+4. Web tab > Add a new web app > Next > Manual configuration > pick Python 3.10 or newer > Next
+5. Web tab > click the WSGI configuration file link. Delete everything in it and paste:
+
+   import sys
+   path = '/home/YOURUSERNAME/busmate'
+   if path not in sys.path:
+       sys.path.insert(0, path)
+   from app import app as application
+
+   (replace YOURUSERNAME with your username) > Save
+6. Web tab > Static files > add:  URL  /static/   Directory  /home/YOURUSERNAME/busmate/static/
+7. Click the green Reload button, then open your link.
+8. IMMEDIATELY log in at  your-link/admin/login  (admin@busmate.com / admin123)
+   and change the admin password.
+
+Free accounts: log in to PythonAnywhere every 3 months and click "Run until 3 months from today" on the Web tab.

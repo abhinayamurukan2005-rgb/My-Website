@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% from "_macros.html" import timeselect %}{% block bodyclass %}admin{% endblock %}{% block body %}
+<div class="card narrow"><h2>Edit bus</h2><form method="post">
+<label class="fld">Bus name<input name="bus_name" value="{{ r.bus_name }}" required></label><label class="fld">Bus type<input name="bus_type" value="{{ r.bus_type }}" required></label>
+<label class="fld">From<input name="source" value="{{ r.source }}" required></label><label class="fld">To<input name="destination" value="{{ r.destination }}" required></label>
+<label class="fld">📅 Travel date<input type="date" name="travel_date" value="{{ r.travel_date }}" required></label>
+<label class="fld">🕘 Departure time<select name="dep_time" required>{% if r.dep_time not in TIMES|map(attribute=0)|list %}<option value="{{ r.dep_time }}" selected>{{ r.dep_time|ampm }}</option>{% endif %}
+{% for v, l in TIMES %}<option value="{{ v }}" {{ 'selected' if v==r.dep_time }}>{{ l }}</option>{% endfor %}</select></label>
+<label class="fld">Price (₹)<input type="number" name="price" value="{{ r.price }}" required></label><button>Save changes</button></form></div>{% endblock %}

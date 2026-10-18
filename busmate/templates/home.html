@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block body %}
+<section class="hero"><div class="hero-text"><h1>Pick your seat.<br>Travel with confidence.</h1><p>Choose your exact seat, see who is sitting beside you, and preview the bus before you book.</p></div>
+<img class="hero-bus" src="/static/images/mascot.svg" alt="BusMate mascot"></section>
+<form class="card row search" method="get"><input name="source" placeholder="📍 From"><input name="destination" placeholder="🏁 To"><input type="date" name="date"><button>🔍 Search buses</button></form>
+<div class="features">
+<div class="feat"><i>💺</i><b>Choose your seat</b><p>Window, aisle or front. Pick exactly where you want to sit.</p></div>
+<div class="feat"><i>🛡️</i><b>Women's safety</b><p>See the gender of the neighbouring seat before you book.</p></div>
+<div class="feat"><i>📷</i><b>Bus preview</b><p>View real interior photos of the bus before you pay.</p></div>
+<div class="feat"><i>🎟️</i><b>Easy booking</b><p>Book in seconds and cancel any time from My Bookings.</p></div></div>
+<h2 class="sec">🚌 Available buses</h2>
+{% for r in routes %}<div class="bus-card"><div class="bus-ico">🚌</div>
+<div class="bus-info"><b>{{ r.bus_name }}</b><small>{{ r.bus_type }}</small><div class="route">{{ r.source }} → {{ r.destination }}</div><div class="when">📅 {{ r.travel_date|dmy }} &nbsp; 🕘 {{ r.dep_time|ampm }}</div></div>
+<div class="actions"><span class="price">₹{{ r.price }}</span><a class="btn alt" href="/route/{{ r.id }}/preview">📷 Interior</a><a class="btn" href="/route/{{ r.id }}/seats">Select seats</a></div></div>
+{% else %}<div class="card">No buses found. Try another search.</div>{% endfor %}{% endblock %}

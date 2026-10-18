@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block bodyclass %}admin{% endblock %}{% block body %}
+<h2>📋 Booking Details</h2>
+<form class="card addform" method="get"><label class="fld">🔍 Search by bus name<input name="q" value="{{ q }}" list="busnames" placeholder="e.g. Kochi rider"></label>
+<datalist id="busnames">{% for n in names %}<option value="{{ n }}">{% endfor %}</datalist>
+<label class="fld">📅 Travel date (pick from calendar)<input type="date" name="date" value="{{ day }}"></label><button>Search</button><a class="btn alt" href="/admin/bookings">Clear</a></form>
+<div class="stats"><div class="stat"><i>🎟️</i><div><small>Bookings found</small><b>{{ rows|length }}</b></div></div><div class="stat"><i>💺</i><div><small>Seats booked</small><b>{{ seats }}</b></div></div><div class="stat"><i>💰</i><div><small>Revenue</small><b>₹{{ rev }}</b></div></div></div>
+<div style="overflow-x:auto;margin-top:14px"><table><tr><th>Booking</th><th>🚌 Bus</th><th>Route</th><th>Travel</th><th>Passengers</th><th>Booked by</th><th>Payment</th><th>Amount</th><th></th></tr>
+{% for b in rows %}<tr><td>#{{ b.id }}<br><small>{{ b.created }}</small></td><td><b>{{ b.bus_name }}</b></td><td>{{ b.source }} → {{ b.destination }}</td><td>{{ b.travel_date }}<br>{{ b.dep_time|ampm }}</td>
+<td>{% for p in pax.get(b.id, []) %}<span class="pill pill{{ p.passenger_gender }}">💺{{ p.seat_no }} · {{ p.passenger_name }} {{ '👩' if p.passenger_gender=='F' else '👨' if p.passenger_gender=='M' else '🧑' }}</span> {% endfor %}</td>
+<td>{{ b.booked_by }}<br><small>{{ b.email }}</small></td><td>{{ b.payment_method or 'Cash' }}<br><small>{{ b.payment_ref or '' }}</small></td><td><b>₹{{ b.total }}</b></td>
+<td><a href="/admin/cancel/{{ b.id }}" onclick="return confirm('Cancel this whole booking?')">Cancel</a></td></tr>
+{% else %}<tr><td colspan="9">No bookings found for this search.</td></tr>{% endfor %}</table></div>
+<p><a class="btn alt" href="/admin">← Back to dashboard</a></p>{% endblock %}

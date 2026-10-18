@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block body %}<h2>🎟️ My Tickets</h2>
+<form class="card row" method="get"><span>Enter the mobile number you used while booking</span><input name="phone" type="tel" value="{{ phone }}" placeholder="📱 10-digit mobile number" pattern="[6-9][0-9]{9}" maxlength="10" required><button>Find my tickets</button></form>
+{% if rows is not none %}{% for b in rows %}<div class="ticket"><div class="tl"><small>BOOKING #{{ b.id }} · REF {{ b.payment_ref }}</small><div class="route">{{ b.source }} → {{ b.destination }}</div>
+<div class="when">🚌 {{ b.bus_name }} · 📅 {{ b.travel_date|dmy }} · 🕘 {{ b.dep_time|t12 }}</div>
+<p>💺 Seats: <b>{{ b.seats }}</b> &nbsp; <a href="/ticket/{{ b.payment_ref }}">View ticket</a></p>
+<form method="post" action="/cancel/{{ b.id }}" onsubmit="return confirm('Cancel this booking?')"><input type="hidden" name="phone" value="{{ phone }}"><button class="btn alt" style="padding:5px 12px">Cancel booking</button></form></div>
+<div class="tr"><small>TOTAL PAID</small><b>₹{{ b.total }}</b><small>✅ Paid via {{ b.payment_method or "Cash" }}</small></div></div>
+{% else %}<div class="card">No tickets found for this number.</div>{% endfor %}{% endif %}{% endblock %}

@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block body %}
+<div class="card narrow" style="text-align:center;max-width:560px"><img src="/static/images/mascot.svg" width="130" alt=""><h2>✅ Payment successful!</h2><p>Your seats are confirmed. Have a happy journey with BusMate!</p></div>
+<div class="ticket" style="max-width:640px;margin:14px auto"><div class="tl"><small>E-TICKET · BOOKING #{{ b.id }}</small><div class="route">{{ b.source }} → {{ b.destination }}</div>
+<div class="when">🚌 {{ b.bus_name }}<br>📅 {{ b.travel_date }} &nbsp; 🕘 {{ b.dep_time }}</div>
+<table style="margin:10px 0"><tr><th>Seat</th><th>Passenger</th></tr>{% for s in seats %}<tr><td>{{ s.seat_no }}</td><td>{{ s.passenger_name }}</td></tr>{% endfor %}</table>
+<small>Paid via {{ b.method }} · Txn {{ b.txn_id }} · {{ b.paid_at }}</small></div>
+<div class="tr"><small>AMOUNT PAID</small><b>₹{{ b.total }}</b><small>{{ b.status }}</small></div></div>
+<p style="text-align:center"><button onclick="window.print()">🖨️ Print ticket</button> <a class="btn alt" href="/bookings">My Bookings</a></p>{% endblock %}
